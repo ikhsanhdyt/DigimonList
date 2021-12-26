@@ -28,9 +28,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Digimon List App',
           theme: ThemeData(primaryColor: Colors.white),
-          routes: {
-            '/list-digimon': (context) => DigimonPage(),
-          },
           home: DigimonPage(),
         ));
   }

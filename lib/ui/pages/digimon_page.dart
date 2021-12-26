@@ -17,7 +17,7 @@ class _DigimonPageState extends State<DigimonPage> {
   @override
   void initState() {
     setState(() {
-      context.read<DigimonListCubit>().fetchDigimonList();
+      context.read<DigimonListCubit>().fetchDigimonList("");
     });
     super.initState();
   }
@@ -85,6 +85,14 @@ class _DigimonPageState extends State<DigimonPage> {
           appBar: AppBar(
             title: Text("Digimon List"),
             backgroundColor: Colors.teal,
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    showSearch(
+                        context: context, delegate: CustomSearchDelegate());
+                  },
+                  icon: Icon(Icons.search))
+            ],
           ),
           body: Stack(
             children: [
@@ -117,6 +125,91 @@ class _DigimonPageState extends State<DigimonPage> {
               })
             ],
           ),
+        );
+      },
+    );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  var suggestion = [
+    "Mega",
+    "Ultimate",
+    "Rookie",
+    "Fresh",
+    "Champion",
+    "Armor",
+    "Training",
+    "In Training"
+  ];
+  late List<String> searchResult;
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    print("Result build");
+    List<String> matchQuery = [];
+
+    for (String callSign in suggestion) {
+      if (callSign.toLowerCase().contains(query)) matchQuery.add(callSign);
+    }
+
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        String result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+          onTap: () => {
+            context.read<DigimonListCubit>().fetchDigimonList(result),
+            Navigator.pop(context)
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    print("Suggestion build");
+    List<String> matchQuery = [];
+
+    for (String callSign in suggestion) {
+      if (callSign.toLowerCase().contains(query.toLowerCase()))
+        matchQuery.add(callSign);
+    }
+
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        String result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+          onTap: () => {
+            context.read<DigimonListCubit>().fetchDigimonList(result),
+            Navigator.pop(context)
+          },
         );
       },
     );

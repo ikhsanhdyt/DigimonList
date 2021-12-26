@@ -8,11 +8,11 @@ part 'digimon_list_state.dart';
 class DigimonListCubit extends Cubit<DigimonListState> {
   DigimonListCubit() : super(DigimonListInitial());
 
-  void fetchDigimonList() async {
+  void fetchDigimonList(String level) async {
     try {
       emit(DigimonListLoading());
 
-      List<Digimon> digimon = await DigimonListServices().fetchDigimon();
+      List<Digimon> digimon = await DigimonListServices().fetchDigimon(level);
 
       emit(DigimonListSuccess(digimon));
     } catch (e) {

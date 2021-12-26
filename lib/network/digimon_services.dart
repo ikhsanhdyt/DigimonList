@@ -4,8 +4,14 @@ import 'package:flutter_challenge/model/digimon.dart';
 import 'package:http/http.dart' as http;
 
 class DigimonListServices {
-  Future<List<Digimon>> fetchDigimon({http.Client? client}) async {
-    final url = "https://digimon-api.vercel.app/api/digimon/";
+  Future<List<Digimon>> fetchDigimon(String level,
+      {http.Client? client}) async {
+    final url;
+    if (level.isEmpty) {
+      url = "https://digimon-api.vercel.app/api/digimon/";
+    } else {
+      url = "https://digimon-api.vercel.app/api/digimon/level/$level";
+    }
     final headers = {
       HttpHeaders.contentTypeHeader: 'application/json',
     };
